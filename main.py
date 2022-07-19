@@ -6,9 +6,12 @@ import sys
 import argparse
 import csv
 import os
+from tkinter import *
+from tkinter import ttk
+from tkinter import filedialog
 
 # Configure logging so entries are sent to STDOUT.
-logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 
 def get_file_paths_from_folder(path_to_folder):
@@ -46,7 +49,7 @@ def get_file_paths_from_csv_file(path_to_csv_file):
         return file_paths
 
 
-def main(path_to_folder, path_to_csv_file, path_to_output_file):
+def main(path_to_folder, path_to_csv_file, path_to_output_file = None):
     logging.info(f'Folder       : {path_to_folder}')
     logging.info(f'dupeGuru CSV : {path_to_csv_file}')
     logging.info(f'Output file  : {path_to_output_file}')
@@ -62,17 +65,51 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file):
     differences = distinct_file_paths_from_folder.difference(distinct_file_paths_from_csv_file)
     logging.info(f"Number of differences                       : {len(differences)}")
 
+    sorted_differences = sorted(list(differences))
+
     # Either write the results to a CSV file or print them to STDOUT.
     if path_to_output_file is None:
-        print('\n'.join(differences))
+        print('\n'.join(sorted_differences))
     else:
         with open(path_to_output_file, 'w', newline='') as f:
             writer = csv.writer(f)
-            rows = [[path] for path in differences]  # gives `rows` the shape: `[ [path_1], [path_2], ..., [path_N] ]`
+            rows = [[path] for path in sorted_differences]  # gives `rows` the shape: `[ [path_1], [path_2], ... ]`
             writer.writerows(rows)
 
 
 if __name__ == '__main__':
+
+    # Reference: https://tkdocs.com/tutorial/firstexample.html
+    root = Tk()
+    root.title("GetDupelessFiles")
+    mainframe = ttk.Frame(root, padding="3 3 12 12")
+    mainframe.grid(column=0, row=0, sticky="nsew")
+    root.columnconfigure(0, weight=1)
+    root.rowconfigure(0, weight=1)
+
+    # Note: I made the field read-only because I want to ensure the path delimiters are normalized (e.g. `/` vs `\`).
+    ttk.Label(mainframe, text="Path to folder: ").grid(row=1, column=1, sticky=W)
+    gui_path_to_folder = StringVar()
+    gui_path_to_folder_entry = ttk.Entry(mainframe, width=100, textvariable=gui_path_to_folder, state='readonly')
+    gui_path_to_folder_entry.grid(column=2, row=1, sticky="we")
+    gui_browse_to_folder = lambda: gui_path_to_folder.set(os.path.normpath(filedialog.askdirectory()))
+    ttk.Button(mainframe, text="Browse...", command=gui_browse_to_folder).grid(row=1, column=3, sticky=W)
+
+    ttk.Label(mainframe, text="Path to CSV file: ").grid(row=2, column=1, sticky=W)
+    gui_path_to_csv_file = StringVar()
+    gui_path_to_csv_file_entry = ttk.Entry(mainframe, width=100, textvariable=gui_path_to_csv_file, state='readonly')
+    gui_path_to_csv_file_entry.grid(column=2, row=2, sticky="we")
+    gui_browse_to_csv_file = lambda: gui_path_to_csv_file.set(os.path.normpath(filedialog.askopenfilename()))
+    ttk.Button(mainframe, text="Browse...", command=gui_browse_to_csv_file).grid(row=2, column=3, sticky=W)
+
+    gui_invoke_main = lambda: main(gui_path_to_folder.get(), gui_path_to_csv_file.get())
+    ttk.Button(mainframe, text="Show dupe-less files", command=gui_invoke_main).grid(row=3, column=2, sticky=W)
+
+    for child in mainframe.winfo_children():
+        child.grid_configure(padx=5, pady=5)
+
+    root.mainloop()
+
     parser = argparse.ArgumentParser(description='Compare a folder to a CSV file exported from dupeGuru.')
     parser.add_argument('path_to_folder',
                         help='Path to folder')
