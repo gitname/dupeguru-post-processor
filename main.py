@@ -38,21 +38,27 @@ def get_file_paths_within_folder(path_to_folder):
 def get_file_paths_from_csv_file(path_to_csv_file):
     """Returns a list of file paths assembled from the specified CSV file, which was exported from dupeGuru."""
 
+    file_paths = []
+
     # Note: Python docs recommend the use of `newline=""` here. See: https://docs.python.org/3/library/csv.html
     with open(path_to_csv_file, newline="") as csv_file:
         reader = csv.reader(csv_file)
 
         # Get the indices of the folder and filename columns.
-        header = next(reader)
-        folder_col_idx = [idx for (idx, s) in enumerate(header) if s == "Folder"][0]
-        filename_col_idx = [idx for (idx, s) in enumerate(header) if s == "Filename"][0]
-        logging.debug(f"Index of CSV column containing folder   : {folder_col_idx}")
-        logging.debug(f"Index of CSV column containing filename : {filename_col_idx}")
+        try:
+            header = next(reader)
+        except StopIteration:  # e.g. CSV file is empty
+            pass
+        else:
+            folder_col_idx = [idx for (idx, s) in enumerate(header) if s == "Folder"][0]
+            filename_col_idx = [idx for (idx, s) in enumerate(header) if s == "Filename"][0]
+            logging.debug(f"Index of CSV column containing folder   : {folder_col_idx}")
+            logging.debug(f"Index of CSV column containing filename : {filename_col_idx}")
 
-        # Build a file path from each non-empty row (reminder: In Python, empty strings are False-y).
-        # Note: We already iterated to the header row above, so that row will not be included in the iteration below.
-        file_paths = [f"{os.path.join(row[folder_col_idx], row[filename_col_idx])}" for row in reader if any(row)]
-        logging.debug(file_paths)
+            # Build a file path from each non-empty row (reminder: In Python, empty strings are False-y).
+            # Note: We already iterated to the header row, so that row will not be included in the iteration below.
+            file_paths = [f"{os.path.join(row[folder_col_idx], row[filename_col_idx])}" for row in reader if any(row)]
+            logging.debug(file_paths)
 
         return file_paths
 
