@@ -30,7 +30,8 @@ def get_file_paths_within_folder(path_to_folder):
     for current_folder_path, child_folder_names, child_file_names in os.walk(path_to_folder):
         for child_file_name in child_file_names:
             file_path = os.path.join(current_folder_path, child_file_name)
-            file_paths.append(file_path)
+            abs_file_path = os.path.abspath(file_path)  # Force absolute path in case user specified the base relatively
+            file_paths.append(abs_file_path)
 
     return file_paths
 
