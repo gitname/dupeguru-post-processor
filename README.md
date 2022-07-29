@@ -7,7 +7,7 @@
 # Workflow
 
 ```mermaid
-flowchart TB
+flowchart LR
 
     subgraph d [dupeGuru]
       d1[Perform filename or contents scan]-->d2[Export results as CSV file]
@@ -15,9 +15,8 @@ flowchart TB
     
     subgraph p [post-processor]
       p1[Specify folder]-->p2[Specify CSV file]
-      p2-->p3[Specify output file path, optionally]
-      p3-->p4[Run script]
-      p4-->p5[See list of files]
+      p2-->p3[Run script]
+      p3-->p4[See list of files]
     end
     
     d2-.->p1
