@@ -59,12 +59,19 @@ options:
 
 ### Examples
 
-Here is an example invocation of the script:
+Here are some example invocations of the script:
+
+#### Display results on console
 
 ```shell
-$ python main.py /path/to/folder/ ./some/dupelist.csv --output_csv_file /temp/nondupelist.csv --log_level INFO
+$ python main.py /path/to/folder/ ./some/dupelist.csv
 ``` 
-> When invoked with the example options shown above, the Python script will: (a) compare the set of file paths within the folder, `/path/to/folder`, to (b) the set of file paths listed in the CSV file, `./some/dupelist.csv`, and (c) write the results in CSV format to the file, `./results/nondupes.csv`, all while (d) displaying any log entries whose log level is at least `INFO`.
+
+#### Save results to a CSV file and display debug information
+
+```shell
+$ python main.py /path/to/folder/ ./some/dupelist.csv --output_csv_file /temp/nondupes.csv --log_level DEBUG
+``` 
 
 # Testing
 
