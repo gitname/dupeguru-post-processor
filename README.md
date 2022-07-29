@@ -26,9 +26,24 @@ flowchart LR
 
 ### Environment
 
-This script was developed using Python version `3.10.5`. All of the script's dependencies are included the Python standard library.
+This script was developed using Python version `3.10.5`.
+
+### GUI
+
+Install dependencies:
+
+```shell
+$ python -m pip install -r requirements.txt
+```
+
+Open the GUI:
+
+```shell
+$ python gui.py
+```
 
 ### CLI
+> **Note:** You can use the CLI without installing any dependencies, since all dependencies used by the CLI are included in the Python standard library.
 
 Display usage information:
 
