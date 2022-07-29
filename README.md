@@ -7,10 +7,10 @@
 # Workflow
 
 ```mermaid
-flowchart LR
+flowchart UD
 
     subgraph d [dupeGuru]
-      d1[Perform scan]-->d2[Export results as CSV file]
+      d1[Perform filename or contents scan]-->d2[Export results as CSV file]
     end
     
     subgraph p [post-processor]
