@@ -56,9 +56,13 @@ def get_file_paths_from_csv_file(path_to_csv_file):
             logging.debug(f"Index of CSV column containing filename : {filename_col_idx}")
 
             # Build a file path from each non-empty row (reminder: In Python, empty strings are False-y).
-            # Note: We already iterated to the header row, so that row will not be included in the iteration below.
-            file_paths = [f"{os.path.join(row[folder_col_idx], row[filename_col_idx])}" for row in reader if any(row)]
-            logging.debug(file_paths)
+            for row in reader:
+                if any(row):
+                    filename = row[filename_col_idx]
+                    folder_path = row[folder_col_idx]
+                    file_path = os.path.join(folder_path, filename)
+                    normalized_file_path = os.path.normpath(file_path)  # normalizes slashes based upon filesystem
+                    file_paths.append(normalized_file_path)
 
         return file_paths
 
