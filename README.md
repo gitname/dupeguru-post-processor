@@ -7,7 +7,7 @@
 # Workflow
 
 ```mermaid
-flowchart UD
+flowchart TB
 
     subgraph d [dupeGuru]
       d1[Perform filename or contents scan]-->d2[Export results as CSV file]
