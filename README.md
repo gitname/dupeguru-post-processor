@@ -23,33 +23,42 @@ flowchart TB
     d2-.->p1
 ```
 
-This script was developed using Python version 3.10.
+This script was developed using Python version `3.10.5`.
 
 # Usage
 
 Display usage information:
 
 ```shell
-python main.py --help
+$ python main.py --help                                                                                                                                                                                                                                 
+usage: main.py [-h] [--output_csv_file PATH] [--log_level LEVEL] folder csv_file
+
+Compares a folder to a CSV file exported from dupeGuru. Displays the differences on the console (default) or writes them to a CSV file.
+
+positional arguments:
+  folder                path to the folder with which you want to compare the CSV file exported from dupeGuru
+  csv_file              path to the CSV file exported from dupeGuru
+
+options:
+  -h, --help            show this help message and exit
+  --output_csv_file PATH
+                        if you use this option, the script will generate a CSV file at the path you specify; otherwise, the script will display the results on the console
+  --log_level LEVEL     specify a logging level for the script
 ```
 
-Examples:
+> Note: File and folder paths can be absolute paths and/or relative paths.
+
+### Example:
 
 ```shell
-# Absolute paths are OK:
-python main.py /path/to/folder /path/to/dupelist.csv
-
-# Relative paths are OK (so is a trailing slash on the folder):
-python main.py ./folder/ ./dupelist.csv
-
-# Mixing and matching relative/absolute paths is OK:
-python main.py /path/to/folder/ ./dupelist.csv
+$ python main.py /path/to/folder/ ./some/dupelist.csv --output_csv_file /temp/nondupes.csv --log_level INFO
 ``` 
+> When invoked with the example options shown above, the Python script will: (a) compare the set of file paths within the folder, `/path/to/folder`, to (b) the set of file paths listed in the CSV file, `./some/dupelist.csv`, and (c) write the results in CSV format to the file, `./results/nondupes.csv`, all while (d) displaying any log entries whose log level is at least `INFO`.
 
 # Testing
 
 Run the unit tests:
 
 ```shell
-python -m unittest
+$ python -m unittest
 ```
