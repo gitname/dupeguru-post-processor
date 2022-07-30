@@ -89,7 +89,7 @@ Open the GUI:
 $ python gui.py
 ```
 
-Here's what the GUI looks like as of release `v1.2.1`:
+Here's what the GUI looks like as of version `1.2.2`:
 
 ![gui](./doc/gui.png)
 
