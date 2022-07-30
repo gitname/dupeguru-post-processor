@@ -21,6 +21,7 @@ import sys
 import argparse
 import csv
 import os
+import pathlib
 
 
 def get_file_paths_within_folder(path_to_folder):
@@ -101,9 +102,17 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=l
     if type(path_to_output_file) is str:
         with open(path_to_output_file, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            header_row = [f"File path"]
+
+            # Populate the header row (i.e. column names).
+            header_row = ["File", "Folder", "Filename", "Suffix (only)"]
             writer.writerow(header_row)
-            data_rows = [[path] for path in sorted_differences]  # result has the shape: `[ [path_1], [path_2], ... ]`
+
+            # Populate the data rows with the file path, folder path (no filename), filename, and file suffix.
+            data_rows = []
+            for path in sorted_differences:
+                file_suffix = pathlib.Path(path).suffix
+                (folder_path, filename) = os.path.split(path)
+                data_rows.append([path, folder_path, filename, file_suffix])
             writer.writerows(data_rows)
     else:
         print('\n'.join(sorted_differences))
