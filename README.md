@@ -28,24 +28,6 @@ flowchart LR
 
 This script was developed using Python version `3.10.5`.
 
-### GUI
-
-Install dependencies:
-
-```shell
-$ python -m pip install -r requirements.txt
-```
-
-Open the GUI:
-
-```shell
-$ python gui.py
-```
-Here's what the GUI looks like as of version `v1.2.0`. The GUI was created as an "afterthought" to the CLI and is targeted at users who are already familiar with the CLI options, but don't want to type filesystem paths onto the command line.
-
-
-![gui](./doc/gui.png)
-
 ### CLI
 > **Note:** You can use the CLI without installing any dependencies, since all dependencies used by the CLI are included in the Python standard library.
 
@@ -90,6 +72,26 @@ $ python main.py /path/to/folder/ ./some/dupelist.csv
 ```shell
 $ python main.py /path/to/folder/ ./some/dupelist.csv --output_csv_file /temp/nondupes.csv --log_level DEBUG
 ``` 
+
+### GUI
+
+The GUI was created as an "afterthought" to the CLI and is targeted at users who are already familiar with the CLI options, but don't want to type filesystem paths onto the command line.
+
+Install dependencies:
+
+```shell
+$ python -m pip install -r requirements.txt
+```
+
+Open the GUI:
+
+```shell
+$ python gui.py
+```
+
+Here's what the GUI looks like as of release `v1.2.1`:
+
+![gui](./doc/gui.png)
 
 # Testing
 
