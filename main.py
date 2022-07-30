@@ -68,8 +68,12 @@ def get_file_paths_from_csv_file(path_to_csv_file):
         return file_paths
 
 
-def main(path_to_folder, path_to_csv_file, path_to_output_file=None):
+def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=logging.NOTSET):
     """Entrypoint to the script."""
+
+    # Configure logging so entries are sent to STDOUT and so the threshold level is the one specified.
+    level = logging.getLevelName(log_level) if type(log_level) is str else log_level
+    logging.basicConfig(stream=sys.stdout, level=level)
 
     logging.info(f'Folder       : {path_to_folder}')
     logging.info(f'dupeGuru CSV : {path_to_csv_file}')
@@ -95,12 +99,14 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file=None):
 
     # Either write the results to a CSV file or print them to STDOUT.
     if type(path_to_output_file) is str:
-        with open(path_to_output_file, 'w', newline='') as f:
+        with open(path_to_output_file, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
             rows = [[path] for path in sorted_differences]  # gives `rows` the shape: `[ [path_1], [path_2], ... ]`
             writer.writerows(rows)
     else:
         print('\n'.join(sorted_differences))
+
+    print("\nDone.\n")
 
 
 if __name__ == '__main__':
@@ -118,7 +124,4 @@ if __name__ == '__main__':
                         help='specify a logging level for the script')
     args = parser.parse_args()
 
-    # Configure logging so entries are sent to STDOUT and so the threshold level is the one specified.
-    logging.basicConfig(stream=sys.stdout, level=logging.getLevelName(args.log_level))
-
-    main(args.folder, args.csv_file, args.output_csv_file)
+    main(args.folder, args.csv_file, args.output_csv_file, args.log_level)
