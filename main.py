@@ -101,8 +101,10 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=l
     if type(path_to_output_file) is str:
         with open(path_to_output_file, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            rows = [[path] for path in sorted_differences]  # gives `rows` the shape: `[ [path_1], [path_2], ... ]`
-            writer.writerows(rows)
+            header_row = [f"File path"]
+            writer.writerow(header_row)
+            data_rows = [[path] for path in sorted_differences]  # result has the shape: `[ [path_1], [path_2], ... ]`
+            writer.writerows(data_rows)
     else:
         print('\n'.join(sorted_differences))
 
