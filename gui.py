@@ -5,7 +5,7 @@ from main import main
 
 sg.theme('Default1')  # alternatives include, e.g., 'DarkGrey9'
 
-layout = [[sg.Text('Select a folder, a CSV file and, optionally, an output folder, then click the Launch button.')],
+layout = [[sg.Text('Select a folder, a CSV file, and (optionally) an output folder, then click the Launch button.')],
           [sg.Text('Folder', size=(17, 1)), sg.Input(key="-FOLDER-"), sg.FolderBrowse()],
           [sg.Text('CSV File', size=(17, 1)), sg.Input(key="-CSV_FILE-"), sg.FileBrowse(file_types=["CSV .csv"])],
           [
