@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from uuid import uuid4
 from os import path
 from main import main
+from version import __version__
 
 sg.theme('Default1')  # alternatives include, e.g., 'DarkGrey9'
 
@@ -23,9 +24,11 @@ layout = [[sg.Text('Select a folder, a CSV file, and (optionally) an output fold
           ],
           [sg.Button('Launch', tooltip='Launch the main script with the specified parameters')]]
 
-# Create the Window
-window = sg.Window('dupeguru-post-processor (Graphical Launcher)', layout)
-# Event Loop to process "events" and get the "values" of the inputs
+# Create the main window.
+window_title = f'dupeguru-post-processor (Graphical Launcher) (v{__version__})'
+window = sg.Window(window_title, layout)
+
+# Event Loop that processes "events" and gets the "values" of the inputs.
 while True:
     event, values = window.read()
 
