@@ -67,16 +67,16 @@ while True:
             #
             while True:
                 random_file_name = f"{uuid4().hex}.csv"
-                path_to_output_file = path.join(path_to_output_folder, random_file_name)
+                path_to_output_file = path.normpath(path.join(path_to_output_folder, random_file_name))
                 if not path.isfile(path_to_output_file):
                     break  # stop iterating once we have a unique file name
-            print(f"Output file path: {path.normpath(path_to_output_file)}\n")
+            print(f"Output file path: {path_to_output_file}\n")
 
         print("Launching dupeguru-post-processor...\n")
         main(
             path.normpath(path_to_folder),
             path.normpath(path_to_csv_file),
-            path.normpath(path_to_output_file),
+            path_to_output_file,
             log_level=log_level
         )
 
