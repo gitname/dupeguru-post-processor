@@ -41,6 +41,10 @@ Open the GUI:
 ```shell
 $ python gui.py
 ```
+Here's what the GUI looks like as of version `v1.2.0`. The GUI was created as an "afterthought" to the CLI and is targeted at users who are already familiar with the CLI options, but don't want to type filesystem paths onto the command line.
+
+
+![gui](./doc/gui.png)
 
 ### CLI
 > **Note:** You can use the CLI without installing any dependencies, since all dependencies used by the CLI are included in the Python standard library.
