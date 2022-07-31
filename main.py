@@ -23,6 +23,12 @@ import csv
 import os
 import pathlib
 
+# Configure logging so entries are sent to STDOUT.
+logging.basicConfig(stream=sys.stdout)
+
+# Create a logger for this module.
+log = logging.getLogger("main")
+
 
 def get_file_paths_within_folder(path_to_folder):
     """Returns a list containing the path of each file within the specified folder and all of its descendant folders."""
@@ -54,8 +60,8 @@ def get_file_paths_from_csv_file(path_to_csv_file):
         else:
             folder_col_idx = [idx for (idx, s) in enumerate(header) if s == "Folder"][0]
             filename_col_idx = [idx for (idx, s) in enumerate(header) if s == "Filename"][0]
-            logging.debug(f"Index of CSV column containing folder   : {folder_col_idx}")
-            logging.debug(f"Index of CSV column containing filename : {filename_col_idx}")
+            log.debug(f"Index of CSV column containing folder   : {folder_col_idx}")
+            log.debug(f"Index of CSV column containing filename : {filename_col_idx}")
 
             # Build a file path from each non-empty row (reminder: In Python, empty strings are False-y).
             for row in reader:
@@ -72,29 +78,30 @@ def get_file_paths_from_csv_file(path_to_csv_file):
 def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=logging.NOTSET):
     """Entrypoint to the script."""
 
-    # Configure logging so entries are sent to STDOUT and so the threshold level is the one specified.
+    # Configure the logger so the threshold logging level is the one specified.
     level = logging.getLevelName(log_level) if type(log_level) is str else log_level
-    logging.basicConfig(stream=sys.stdout, level=level)
+    log.setLevel(level)
+    log.debug(f"Log level   : {log_level} ({level})")
 
-    logging.info(f'Folder       : {path_to_folder}')
-    logging.info(f'dupeGuru CSV : {path_to_csv_file}')
-    logging.info(f'Output file  : {path_to_output_file}')
+    log.info(f'Folder       : {path_to_folder}')
+    log.info(f'dupeGuru CSV : {path_to_csv_file}')
+    log.info(f'Output file  : {path_to_output_file}')
 
     # Get a list of file paths from each source.
     file_paths_from_folder = get_file_paths_within_folder(path_to_folder)
     file_paths_from_csv_file = get_file_paths_from_csv_file(path_to_csv_file)
-    logging.debug(f"Number of file paths from folder   : {len(file_paths_from_folder)}")
-    logging.debug(f"Number of file paths from CSV file : {len(file_paths_from_csv_file)}")
+    log.debug(f"Number of file paths from folder   : {len(file_paths_from_folder)}")
+    log.debug(f"Number of file paths from CSV file : {len(file_paths_from_csv_file)}")
 
     # Eliminate duplicate file paths from each list.
     distinct_file_paths_from_folder = set(file_paths_from_folder)
     distinct_file_paths_from_csv_file = set(file_paths_from_csv_file)
-    logging.debug(f"Number of distinct file paths from folder   : {len(distinct_file_paths_from_folder)}")
-    logging.debug(f"Number of distinct file paths from CSV file : {len(distinct_file_paths_from_csv_file)}")
+    log.debug(f"Number of distinct file paths from folder   : {len(distinct_file_paths_from_folder)}")
+    log.debug(f"Number of distinct file paths from CSV file : {len(distinct_file_paths_from_csv_file)}")
 
     # Determine which file paths from the folder are not in the set of file paths from the CSV file.
     differences = distinct_file_paths_from_folder.difference(distinct_file_paths_from_csv_file)
-    logging.info(f"Number of differences : {len(differences)}")
+    log.info(f"Number of differences : {len(differences)}")
 
     sorted_differences = sorted(list(differences))
 
@@ -116,8 +123,6 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=l
             writer.writerows(data_rows)
     else:
         print('\n'.join(sorted_differences))
-
-    print("\nDone.\n")
 
 
 if __name__ == '__main__':
