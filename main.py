@@ -75,6 +75,25 @@ def get_file_paths_from_csv_file(path_to_csv_file):
         return file_paths
 
 
+def write_to_csv_file(file_paths, path_to_output_file):
+    """Writes the specified file paths--and some of their constituent elements--to the specified output file."""
+
+    with open(path_to_output_file, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+
+        # Populate the header row (i.e. column names).
+        header_row = ["File", "Folder", "Filename", "Suffix (only)"]
+        writer.writerow(header_row)
+
+        # Populate the data rows with the file path, folder path (no filename), filename, and file suffix.
+        data_rows = []
+        for file_path in file_paths:
+            file_suffix = pathlib.Path(file_path).suffix
+            (folder_path, filename) = os.path.split(file_path)
+            data_rows.append([file_path, folder_path, filename, file_suffix])
+        writer.writerows(data_rows)
+
+
 def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=logging.NOTSET):
     """Entrypoint to the script."""
 
@@ -107,20 +126,7 @@ def main(path_to_folder, path_to_csv_file, path_to_output_file=None, log_level=l
 
     # Either write the results to a CSV file or print them to STDOUT.
     if type(path_to_output_file) is str:
-        with open(path_to_output_file, 'w', encoding='utf-8', newline='') as f:
-            writer = csv.writer(f)
-
-            # Populate the header row (i.e. column names).
-            header_row = ["File", "Folder", "Filename", "Suffix (only)"]
-            writer.writerow(header_row)
-
-            # Populate the data rows with the file path, folder path (no filename), filename, and file suffix.
-            data_rows = []
-            for path in sorted_differences:
-                file_suffix = pathlib.Path(path).suffix
-                (folder_path, filename) = os.path.split(path)
-                data_rows.append([path, folder_path, filename, file_suffix])
-            writer.writerows(data_rows)
+        write_to_csv_file(sorted_differences, path_to_output_file)
     else:
         print('\n'.join(sorted_differences))
 
